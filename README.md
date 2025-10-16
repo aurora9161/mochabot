@@ -1,67 +1,87 @@
-# ☕ MochaBot
+# ☕ MochaBot - Mental Health & Coffee Community Support
 
 [![Discord.py](https://img.shields.io/badge/discord.py-2.3.0+-blue.svg)](https://github.com/Rapptz/discord.py)
 [![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+[![Mental Health](https://img.shields.io/badge/focus-Mental%20Health-blue.svg)](#mental-health-features)
 [![Maintenance](https://img.shields.io/badge/maintained-yes-green.svg)](https://github.com/aurora9161/mochabot)
 
-MochaBot is an advanced, coffee-themed Discord bot designed for community management and engagement. Built with Python and Discord.py, it features a beautiful custom help system, comprehensive moderation tools, fun games, and coffee-themed commands that will keep your server buzzing with activity!
+> **Combining the comfort of coffee culture with mental health resources and therapeutic support**
 
-## ✨ Features
+MochaBot is an advanced Discord bot that creates a safe, supportive environment where coffee culture meets mental wellness. Designed for communities focused on mental health, therapy support groups, and wellness-oriented servers, it provides both engaging coffee-themed features and comprehensive mental health resources.
+
+## 🎯 **Mission Statement**
+
+To provide a digital safe space where the warmth of coffee culture combines with evidence-based mental health tools, creating supportive communities that prioritize both connection and wellbeing.
+
+## ✨ Key Features
+
+### 🧠 **Mental Health & Therapy Support**
+- **Crisis Resources** with international helplines and emergency contacts
+- **Daily Wellness Check-ins** for mood tracking and self-reflection
+- **Guided Breathing Exercises** for anxiety and panic management
+- **Grounding Techniques** including 5-4-3-2-1 method and progressive muscle relaxation
+- **Positive Affirmations** for self-esteem and motivation
+- **Mood Tracking** with personalized insights and support
+- **Self-Care Suggestions** across physical, emotional, mental, and social dimensions
+- **Therapy Resources** including finding therapists and online therapy options
+- **Mindfulness Tools** for present-moment awareness
 
 ### 🎛️ **Advanced Help System**
-- **Interactive Help Menu** with button navigation
-- **Beautiful Embeds** with coffee-themed design
-- **Categorized Commands** for easy browsing
-- **Command Details** with usage examples and cooldowns
-- **Search Functionality** to find specific commands
+- **Mental Health Quick Access** button for immediate support
+- **Interactive Help Menu** with crisis resource integration
+- **Categorized Commands** with therapy-focused organization
+- **Command Details** including mental health context
+- **Safe Space Indicators** for sensitive commands
 
-### ☕ **Coffee Commands**
-- Get random coffee suggestions and descriptions
-- Brewing guides for different methods (espresso, pour-over, French press, cold brew)
-- Coffee facts and quotes to fuel your day
-- Caffeine content calculator for various drinks
-- Coffee shop recommendations
-- Random coffee images from APIs
+### ☕ **Coffee-Themed Community Building**
+- Coffee suggestions and brewing guides for community bonding
+- Coffee facts and quotes that promote mindfulness
+- Caffeine content calculator for health awareness
+- Coffee shop recommendations for social connection
+- Random coffee images for mood enhancement
 
-### 🎮 **Fun & Games**
-- Coffee-themed jokes and trivia
-- Interactive games (Rock Paper Scissors, 8-Ball, Dice Rolling)
-- Meme generator from Reddit
-- Inspirational quotes
-- Compliment generator
-- And much more!
+### 🎮 **Therapeutic Games & Activities**
+- Coffee-themed humor for mood lifting
+- Interactive trivia for cognitive engagement
+- Stress-relief games and activities
+- Compliment generator for positive reinforcement
+- Creative exercises for emotional expression
 
-### 🛡️ **Moderation Tools**
-- Comprehensive moderation commands (kick, ban, timeout, warn)
-- Message management (clear, slowmode)
-- Channel lockdown system
-- Detailed logging with embeds
-- Permission-based command access
+### 🔧 **Community Wellness Tools**
+- Anonymous polls for group feedback
+- Reminder system for self-care activities
+- QR codes for sharing resources
+- Wellness check broadcast system
+- Support group coordination tools
 
-### 🔧 **Utility Commands**
-- Interactive polls with emoji reactions
-- Reminder system
-- Weather information (with API integration)
-- QR code generator
-- Base64 encoder/decoder
-- Hash generator (MD5, SHA1, SHA256)
-- Timestamp converter
-- Color information display
+### 🛡️ **Safe Space Moderation**
+- Trauma-informed moderation tools
+- Gentle warning system
+- Crisis intervention protocols
+- Content filtering for mental health safety
+- Support-focused timeout system
 
-### 📊 **General Commands**
-- Bot and server information
-- User profiles with detailed stats
-- Ping and latency checking
-- Avatar display
-- System resource monitoring
+## 🆘 **Crisis Support Features**
+
+### **Immediate Access**
+- `!crisis` - International crisis helplines
+- `!therapy` - Professional therapy resources
+- `!breathe` - Emergency breathing exercises
+- `!ground` - Panic attack grounding techniques
+
+### **Safety Measures**
+- 24/7 crisis resource availability
+- Privacy-focused mental health tracking
+- Non-judgmental automated responses
+- Professional resource recommendations
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Python 3.8 or higher
 - Discord Bot Token
-- Git (for cloning)
+- Understanding of mental health community needs
 
 ### Installation
 
@@ -76,215 +96,197 @@ MochaBot is an advanced, coffee-themed Discord bot designed for community manage
    pip install -r requirements.txt
    ```
 
-3. **Set up environment variables**
+3. **Configure for mental health support**
    ```bash
    cp .env.example .env
-   # Edit .env with your Discord bot token and other settings
+   # Edit .env with your Discord bot token
    ```
 
-4. **Run the bot**
+4. **Run MochaBot**
    ```bash
    python bot.py
    ```
 
-### Docker Setup (Alternative)
+## 🏥 **Setting Up Mental Health Channels**
 
-```dockerfile
-# Dockerfile
-FROM python:3.11-slim
+For optimal mental health support, create these channels:
 
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+- `#wellness` - Daily wellness reminders
+- `#mental-health` - Mental health discussions
+- `#support` - Peer support conversations
+- `#daily-wellness` - Automated wellness checks
+- `#self-care` - Self-care tips and activities
+- `#crisis-resources` - Crisis support information
 
-COPY . .
-CMD ["python", "bot.py"]
-```
+## 📝 **Mental Health Commands**
 
-```bash
-docker build -t mochabot .
-docker run -d --env-file .env mochabot
-```
+### 🆘 **Crisis & Support**
+- `!crisis [country]` - Emergency mental health resources
+- `!therapy` - Find professional mental health support
+- `!breathe [exercise]` - Guided breathing exercises
+- `!ground [technique]` - Grounding techniques for anxiety
 
-## ⚙️ Configuration
+### 🌸 **Daily Wellness**
+- `!checkin` - Daily mental health reflection
+- `!mood <1-10> [notes]` - Track and log your mood
+- `!affirmation` - Receive positive affirmations
+- `!selfcare [category]` - Personalized self-care suggestions
+
+### ☕ **Coffee & Community**
+- `!coffee` - Random coffee suggestions for social bonding
+- `!brew [method]` - Brewing guides as mindfulness practice
+- `!coffeefact` - Educational coffee content
+- `!coffeeapi` - Mood-boosting coffee images
+
+### 🎮 **Wellness Activities**
+- `!joke` - Light humor for mood enhancement
+- `!compliment [@user]` - Spread positivity
+- `!quote` - Inspirational quotes
+- `!trivia` - Engaging mental stimulation
+
+## 🤝 **Community Guidelines**
+
+### **For Mental Health Communities**
+1. **Respect Privacy** - Never pressure sharing personal details
+2. **No Diagnosis** - Avoid giving medical advice
+3. **Crisis Protocol** - Always direct to `!crisis` for emergencies
+4. **Inclusive Support** - Welcome all mental health experiences
+5. **Professional Boundaries** - Encourage professional help when needed
+
+### **Safe Space Principles**
+- Trauma-informed interactions
+- Non-judgmental automated responses
+- Privacy-focused data handling
+- Crisis-aware content filtering
+- Supportive community building
+
+## 🔒 **Privacy & Safety**
+
+- **No Personal Data Storage** - Mood logs are not permanently stored
+- **Anonymous Crisis Access** - Crisis resources available without logging
+- **Safe Command Design** - Mental health commands include safety disclaimers
+- **Professional Referrals** - Always recommend professional help for serious issues
+
+## ⚙️ **Configuration for Therapy Groups**
 
 ### Environment Variables
-
-Create a `.env` file based on `.env.example`:
-
 ```env
 # Required
-DISCORD_TOKEN=your_discord_bot_token_here
+DISCORD_TOKEN=your_bot_token
 
-# Optional
-OPENWEATHER_API_KEY=your_api_key  # For weather commands
-BOT_PREFIX=!                      # Default command prefix
-LOG_LEVEL=INFO                    # Logging level
+# Mental Health Focused Settings
+BOT_PREFIX=!
+MENTAL_HEALTH_MODE=true
+CRISIS_PING_ROLE=crisis-support
+WELLNESS_CHANNEL=wellness
 ```
 
-### Getting a Discord Bot Token
+### Therapy Group Features
+- Automated wellness check-ins
+- Mood tracking without permanent storage
+- Crisis resource quick access
+- Anonymous support tools
+- Professional therapy resource database
 
-1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click "New Application" and give it a name
-3. Go to the "Bot" section
-4. Click "Add Bot"
-5. Copy the token and add it to your `.env` file
-6. Enable necessary intents:
-   - Message Content Intent
-   - Server Members Intent
-   - Presence Intent (optional)
+## 👩‍⚕️ **For Mental Health Professionals**
 
-### Inviting the Bot
+### Integration Benefits
+- **Client Engagement** - Interactive tools for therapy homework
+- **Mood Tracking** - Simple mood monitoring between sessions
+- **Crisis Resources** - 24/7 crisis support availability
+- **Community Building** - Safe peer support environment
+- **Wellness Reminders** - Automated self-care prompts
 
-1. In the Developer Portal, go to OAuth2 > URL Generator
-2. Select "bot" and "applications.commands" scopes
-3. Select necessary permissions:
-   - Send Messages
-   - Embed Links
-   - Add Reactions
-   - Use Slash Commands
-   - Manage Messages (for moderation)
-   - Kick Members (for moderation)
-   - Ban Members (for moderation)
-   - Moderate Members (for timeouts)
-4. Use the generated URL to invite the bot
+### Professional Use Cases
+- Support group servers
+- Therapy practice community building
+- Mental health education servers
+- Peer support networks
+- Wellness-focused Discord communities
 
-## 📝 Commands Overview
+## 🐛 **Troubleshooting**
 
-### ☕ Coffee Commands
-- `!coffee` - Get a random coffee suggestion
-- `!brew [method]` - Get brewing tips and guides
-- `!coffeefact` - Learn interesting coffee facts
-- `!coffeeapi` - Get random coffee images
-- `!coffeequote` - Inspirational coffee quotes
-- `!caffeine [drink]` - Check caffeine content
-- `!coffeeshop` - Coffee shop recommendations
+### **Mental Health Commands Not Working**
+- Ensure mental health cog is loaded
+- Check channel permissions for sensitive content
+- Verify crisis resource links are current
 
-### 🎮 Fun Commands
-- `!joke` - Coffee-themed jokes
-- `!8ball <question>` - Magic 8-ball with coffee twist
-- `!roll [dice]` - Roll dice (e.g., 2d6)
-- `!flip` - Flip a coin
-- `!choose <options>` - Choose between options
-- `!rps <choice>` - Rock Paper Scissors
-- `!trivia` - Coffee trivia questions
-- `!meme` - Random memes from Reddit
-- `!compliment [@user]` - Give compliments
+### **Crisis Command Issues**
+- Update crisis resources regularly
+- Test international helpline numbers
+- Ensure 24/7 availability
 
-### 🔧 Utility Commands
-- `!poll <question> <option1> <option2>...` - Create polls
-- `!remind <time> <message>` - Set reminders
-- `!weather <city>` - Get weather info
-- `!qr <text>` - Generate QR codes
-- `!base64 <encode/decode> <text>` - Base64 operations
-- `!hash <algorithm> <text>` - Generate hashes
-- `!timestamp [unix_time]` - Timestamp converter
-- `!color <hex>` - Color information
+## 📄 **Disclaimer**
 
-### 🛡️ Moderation Commands
-- `!kick <member> [reason]` - Kick a member
-- `!ban <member> [days] [reason]` - Ban a member
-- `!unban <user_id> [reason]` - Unban a user
-- `!timeout <member> <duration> [reason]` - Timeout a member
-- `!untimeout <member> [reason]` - Remove timeout
-- `!clear [amount]` - Clear messages
-- `!slowmode [seconds]` - Set channel slowmode
-- `!warn <member> [reason]` - Warn a member
-- `!lockdown [action]` - Lock/unlock channel
+**Important:** MochaBot is designed to support mental wellness but is not a replacement for professional mental health care. If you or someone you know is in crisis, please contact emergency services or a mental health professional immediately.
 
-### 📊 General Commands
-- `!ping` - Check bot latency
-- `!info` - Bot information
-- `!serverinfo` - Server information
-- `!userinfo [@user]` - User information
-- `!avatar [@user]` - Display avatar
+- Bot tools are supportive, not therapeutic
+- Crisis resources should be verified regularly
+- Professional help is always recommended for serious mental health concerns
+- This bot is not supervised by mental health professionals
 
-## 🎨 Customization
+## 🤝 **Contributing to Mental Health Support**
 
-### Changing the Bot Color
-Edit `BOT_COLOR` in each cog file or the main bot file:
-```python
-BOT_COLOR = 0x8B4513  # Coffee brown
-```
+### **Ways to Help**
+1. **Update Crisis Resources** - Keep helplines current
+2. **Add Therapeutic Activities** - Contribute wellness exercises
+3. **Improve Safety Features** - Enhance crisis detection
+4. **Expand Language Support** - Make resources more accessible
+5. **Test with Communities** - Gather feedback from mental health servers
 
-### Adding New Commands
-1. Create commands in existing cogs or create new cog files
-2. Follow the existing pattern with hybrid commands
-3. Add proper error handling and permission checks
+### **Mental Health-Focused Development**
+- Follow trauma-informed design principles
+- Research evidence-based mental health tools
+- Prioritize privacy and safety
+- Collaborate with mental health professionals
+- Test in real support communities
 
-### Custom Emojis
-Replace the emoji variables in cog files with your server's custom emojis:
-```python
-self.emoji = '<:custom_emoji:emoji_id>'
-```
+## 🔗 **Mental Health Resources**
 
-## 🤝 Contributing
+### **Crisis Lines (24/7)**
+- **US**: 988 (Suicide & Crisis Lifeline)
+- **UK**: 116 123 (Samaritans)
+- **Canada**: 1-833-456-4566 (Talk Suicide Canada)
+- **Australia**: 13 11 14 (Lifeline)
+- **International**: Use `!crisis <country>` for local resources
 
-Contributions are welcome! Here's how you can help:
+### **Professional Support**
+- [Psychology Today](https://www.psychologytoday.com/) - Find therapists
+- [BetterHelp](https://www.betterhelp.com/) - Online therapy
+- [NAMI](https://www.nami.org/) - Mental health education
+- [Mental Health America](https://www.mhanational.org/) - Resources and support
 
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Make your changes**
-4. **Commit your changes**
-   ```bash
-   git commit -m "Add amazing feature"
-   ```
-5. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-6. **Open a Pull Request**
+## 🏆 **Awards & Recognition**
 
-### Development Guidelines
-- Follow PEP 8 style guidelines
-- Add docstrings to functions and classes
-- Test your changes thoroughly
-- Update documentation as needed
+*Designed with input from mental health advocates and support communities*
 
-## 🐛 Issues & Support
+## 📄 **License**
 
-- **Bug Reports**: [GitHub Issues](https://github.com/aurora9161/mochabot/issues)
-- **Feature Requests**: [GitHub Issues](https://github.com/aurora9161/mochabot/issues)
-- **Discord Support**: [Join our support server](https://discord.gg/example)
+This project is licensed under the MIT License with a focus on mental health community support - see the [LICENSE](LICENSE) file for details.
 
-## 📋 Roadmap
+## 🙏 **Acknowledgments**
 
-- [ ] Database integration for persistent data
-- [ ] Web dashboard for bot configuration
-- [ ] Music commands
-- [ ] Economy system with coffee-themed currency
-- [ ] Custom server settings
-- [ ] Advanced logging system
-- [ ] Slash command migration
-- [ ] Multi-language support
+- **Mental Health Advocates** - For guidance on community needs
+- **Crisis Intervention Specialists** - For safety protocol advice
+- **Discord Therapy Communities** - For real-world testing and feedback
+- **Coffee Communities** - For the inspiration behind the coffee theme
+- **Open Source Mental Health Projects** - For shared resources and approaches
 
-## 📄 License
+## ☕💙 **Show Your Support**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Discord.py** - The amazing Python library for Discord bots
-- **Coffee API** - For providing coffee images
-- **OpenWeatherMap** - Weather data provider
-- **Various APIs** - For quotes, memes, and other content
-- **Coffee Community** - For inspiration and testing
-
-## ☕ Show Your Support
-
-If you found this project helpful, please consider:
-- ⭐ Starring the repository
-- 🍴 Forking and contributing
-- ☕ Buying me a coffee (links coming soon!)
-- 💬 Sharing with your friends
+If MochaBot has supported your mental health community:
+- ⭐ Star the repository to show appreciation
+- 🍴 Fork and contribute mental health improvements
+- 💬 Share with other mental health communities
+- ☕ Support the developer (coffee fund coming soon!)
+- 💙 Spread awareness about mental health resources
 
 ---
 
 <div align="center">
-  <b>Made with ☕ and ❤️ by <a href="https://github.com/aurora9161">aurora9161</a></b>
+  <h3>💙 Remember: You Matter, You're Not Alone, and Help is Available 💙</h3>
+  <p><strong>Crisis? Text "HELLO" to 741741 (US) or use <code>!crisis</code> for international resources</strong></p>
   <br>
-  <i>Keep brewing, keep coding!</i>
+  <p><em>Made with ☕, 💙, and deep care for mental health by <a href="https://github.com/aurora9161">aurora9161</a></em></p>
+  <p><em>"In a world where you can be anything, be kind - especially to yourself"</em></p>
 </div>
