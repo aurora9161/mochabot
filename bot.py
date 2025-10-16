@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
-MochaBot - An Advanced Coffee-Themed Discord Bot
-Designed for community management and engagement
+MochaBot - An Advanced Coffee-Themed Discord Bot for Mental Health & Therapy
+Designed for community management, mental wellness, and therapeutic support
 Created by: aurora9161
+
+Combining the comfort of coffee culture with mental health resources,
+this bot provides a safe, supportive environment for community wellness.
 """
 
 import discord
@@ -22,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 # Bot configuration
 BOT_PREFIX = '!'
-BOT_VERSION = "2.0.0"
+BOT_VERSION = "2.1.0"  # Updated for mental health features
 BOT_COLOR = 0x8B4513  # Coffee brown color
 
 # Intents setup
@@ -33,7 +36,7 @@ intents.guilds = True
 
 
 class MochaHelpCommand(commands.HelpCommand):
-    """Custom help command with beautiful embeds and coffee theme"""
+    """Custom help command with beautiful embeds and coffee + mental health theme"""
     
     def __init__(self):
         super().__init__()
@@ -48,7 +51,7 @@ class MochaHelpCommand(commands.HelpCommand):
         """Send the main help page with all categories"""
         embed = discord.Embed(
             title="☕ MochaBot Help Menu",
-            description=f"**Welcome to MochaBot v{BOT_VERSION}**\n\n*Your friendly coffee-themed Discord companion!*\n\n**Prefix:** `{self.context.clean_prefix}`\n\n**🔍 Quick Navigation:**\nUse `{self.context.clean_prefix}help <category>` or `{self.context.clean_prefix}help <command>` for detailed information.",
+            description=f"**Welcome to MochaBot v{BOT_VERSION}**\n\n*Your friendly coffee-themed companion for mental wellness and community support!*\n\n**🎯 Purpose:** Combining coffee culture with mental health resources\n**📞 Crisis Support:** Use `{self.context.clean_prefix}crisis` for emergency resources\n**Prefix:** `{self.context.clean_prefix}`\n\n**🔍 Quick Navigation:**\nUse `{self.context.clean_prefix}help <category>` or `{self.context.clean_prefix}help <command>` for detailed information.",
             color=BOT_COLOR,
             timestamp=datetime.utcnow()
         )
@@ -81,13 +84,19 @@ class MochaHelpCommand(commands.HelpCommand):
         
         # Add useful information
         embed.add_field(
-            name="🔗 Useful Links",
-            value="[Support Server](https://discord.gg/example) | [GitHub](https://github.com/aurora9161/mochabot) | [Invite Bot](https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID)",
+            name="🔗 Resources",
+            value="[Support Server](https://discord.gg/example) | [GitHub](https://github.com/aurora9161/mochabot) | [Mental Health Resources](https://www.nami.org/)",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="🆘 Need Help?",
+            value=f"Mental Health Crisis: `{self.context.clean_prefix}crisis`\nDaily Check-in: `{self.context.clean_prefix}checkin`\nBreathing Exercise: `{self.context.clean_prefix}breathe`",
             inline=False
         )
         
         embed.set_footer(
-            text=f"Requested by {self.context.author} | MochaBot v{BOT_VERSION}",
+            text=f"Requested by {self.context.author} | MochaBot v{BOT_VERSION} | You matter 💙",
             icon_url=self.context.author.avatar.url if self.context.author.avatar else None
         )
         
@@ -132,8 +141,16 @@ class MochaHelpCommand(commands.HelpCommand):
                 inline=True
             )
         
+        # Add mental health note for relevant commands
+        if command.cog and hasattr(command.cog, 'emoji') and command.cog.emoji == '🧠':
+            embed.add_field(
+                name="💙 Note",
+                value="This is a mental health support command. Please use it in a safe, private space if needed.",
+                inline=False
+            )
+        
         embed.set_footer(
-            text=f"Use {self.context.clean_prefix}help for more commands",
+            text=f"Use {self.context.clean_prefix}help for more commands | Remember: You're not alone 💙",
             icon_url=self.context.bot.user.avatar.url if self.context.bot.user.avatar else None
         )
         
@@ -164,8 +181,16 @@ class MochaHelpCommand(commands.HelpCommand):
                 inline=False
             )
         
+        # Add special note for mental health cog
+        if hasattr(cog, 'emoji') and cog.emoji == '🧠':
+            embed.add_field(
+                name="💙 Remember",
+                value="These tools support mental wellness but don't replace professional help. If you're in crisis, please reach out to a mental health professional or use `!crisis` for emergency resources.",
+                inline=False
+            )
+        
         embed.set_footer(
-            text=f"Use {self.context.clean_prefix}help <command> for detailed info",
+            text=f"Use {self.context.clean_prefix}help <command> for detailed info | You matter 💙",
             icon_url=self.context.bot.user.avatar.url if self.context.bot.user.avatar else None
         )
         
@@ -198,7 +223,7 @@ class MochaHelpCommand(commands.HelpCommand):
 
 
 class HelpMenuView(discord.ui.View):
-    """Interactive view for the help menu"""
+    """Interactive view for the help menu with mental health focus"""
     
     def __init__(self, ctx, mapping):
         super().__init__(timeout=180.0)
@@ -212,12 +237,46 @@ class HelpMenuView(discord.ui.View):
     @discord.ui.button(label='🏠 Home', style=discord.ButtonStyle.blurple)
     async def home_button(self, interaction, button):
         await interaction.response.defer()
-        # Recreate the main help embed
         help_command = MochaHelpCommand()
         help_command.context = self.ctx
         await help_command.send_bot_help(self.mapping)
     
-    @discord.ui.button(label='📋 Commands List', style=discord.ButtonStyle.green)
+    @discord.ui.button(label='🧠 Mental Health', style=discord.ButtonStyle.green)
+    async def mental_health_button(self, interaction, button):
+        embed = discord.Embed(
+            title="🧠 Mental Health Quick Access",
+            description="Immediate access to mental health and wellness resources",
+            color=0x87CEEB,  # Sky blue for calm
+            timestamp=datetime.utcnow()
+        )
+        
+        embed.add_field(
+            name="🆘 Crisis Resources",
+            value=f"`{self.ctx.clean_prefix}crisis` - Emergency helplines\n`{self.ctx.clean_prefix}therapy` - Find professional help",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="🌸 Daily Wellness",
+            value=f"`{self.ctx.clean_prefix}checkin` - Daily mental health check\n`{self.ctx.clean_prefix}mood <1-10>` - Track your mood\n`{self.ctx.clean_prefix}affirmation` - Positive affirmations",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="🫁 Coping Tools",
+            value=f"`{self.ctx.clean_prefix}breathe` - Breathing exercises\n`{self.ctx.clean_prefix}ground` - Grounding techniques\n`{self.ctx.clean_prefix}selfcare` - Self-care suggestions",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="💙 Remember",
+            value="You're not alone. These tools are here to support you, but please reach out to professionals when needed.",
+            inline=False
+        )
+        
+        await interaction.response.edit_message(embed=embed, view=self)
+    
+    @discord.ui.button(label='📋 Commands List', style=discord.ButtonStyle.secondary)
     async def commands_list_button(self, interaction, button):
         embed = discord.Embed(
             title="📋 All Commands Quick Reference",
@@ -230,10 +289,9 @@ class HelpMenuView(discord.ui.View):
             for cmd in commands_list:
                 all_commands.append(f"`{self.ctx.clean_prefix}{cmd.name}`")
         
-        # Split into chunks for better display
         command_chunks = [all_commands[i:i+15] for i in range(0, len(all_commands), 15)]
         
-        for i, chunk in enumerate(command_chunks[:3]):  # Limit to 3 fields
+        for i, chunk in enumerate(command_chunks[:3]):
             embed.add_field(
                 name=f"Commands {i*15+1}-{min((i+1)*15, len(all_commands))}",
                 value="\n".join(chunk),
@@ -260,7 +318,13 @@ class HelpMenuView(discord.ui.View):
         
         embed.add_field(
             name="☕ About MochaBot",
-            value="A coffee-themed Discord bot designed for community management and engagement. Created with love and lots of caffeine!",
+            value="A coffee-themed Discord bot designed for community management and mental health support. Combining the comfort of coffee culture with wellness resources and therapeutic tools. Created with love, caffeine, and care for mental health.",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="🎯 Mission",
+            value="To provide a safe, supportive environment where coffee culture meets mental wellness, offering both community engagement and therapeutic resources.",
             inline=False
         )
         
@@ -288,38 +352,39 @@ bot = commands.Bot(
 @bot.event
 async def on_ready():
     """Bot startup event"""
-    logger.info(f'☕ {bot.user} has brewed up and is ready to serve!')
+    logger.info(f'☕ {bot.user} has brewed up and is ready to support your community!')
     logger.info(f'Connected to {len(bot.guilds)} servers with {len(bot.users)} users')
+    logger.info('🧠 Mental health resources loaded and ready to help')
     
-    # Set bot activity
+    # Set bot activity with mental health focus
     activity = discord.Activity(
-        type=discord.ActivityType.watching,
-        name=f"coffee brewing in {len(bot.guilds)} servers | {BOT_PREFIX}help"
+        type=discord.ActivityType.listening,
+        name=f"your mental wellness in {len(bot.guilds)} servers | {BOT_PREFIX}help"
     )
-    await bot.change_presence(activity=activity)
+    await bot.change_presence(activity=activity, status=discord.Status.online)
     
     # Start background tasks
-    if not coffee_facts.is_running():
-        coffee_facts.start()
+    if not daily_wellness_check.is_running():
+        daily_wellness_check.start()
 
 
 @bot.event
 async def on_member_join(member):
-    """Welcome new members with coffee theme"""
+    """Welcome new members with coffee theme and mental health support info"""
     welcome_messages = [
-        f"☕ Welcome to the coffee house, {member.mention}! Grab a cup and stay awhile!",
-        f"🌟 {member.mention} just joined our café! Welcome aboard!",
-        f"☕ A new coffee enthusiast has arrived! Welcome, {member.mention}!",
-        f"🎉 Welcome {member.mention}! The coffee is fresh and the community is warm!"
+        f"☕ Welcome to our supportive coffee house, {member.mention}! This is a safe space for community and wellness.",
+        f"🌟 {member.mention} just joined our mental wellness café! We're here to support each other.",
+        f"☕ A new member has arrived at our wellness community! Welcome, {member.mention}!",
+        f"🎉 Welcome {member.mention}! Our community values mental health, coffee culture, and mutual support."
     ]
     
     # Try to find a welcome channel
-    welcome_channels = ['welcome', 'general', 'lobby', 'café', 'coffee-house']
+    welcome_channels = ['welcome', 'general', 'lobby', 'café', 'coffee-house', 'wellness', 'support']
     for channel_name in welcome_channels:
         channel = discord.utils.get(member.guild.text_channels, name=channel_name)
         if channel:
             embed = discord.Embed(
-                title="☕ Welcome to the Coffee House!",
+                title="☕ Welcome to Our Wellness Community!",
                 description=random.choice(welcome_messages),
                 color=BOT_COLOR,
                 timestamp=datetime.utcnow()
@@ -327,78 +392,109 @@ async def on_member_join(member):
             embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
             embed.add_field(
                 name="🎯 Get Started",
-                value=f"Use `{BOT_PREFIX}help` to see what I can do!",
+                value=f"Use `{BOT_PREFIX}help` to see all features\nTry `{BOT_PREFIX}checkin` for daily wellness\nUse `{BOT_PREFIX}crisis` if you need immediate support",
                 inline=False
             )
-            embed.set_footer(text=f"Member #{len(member.guild.members)}")
+            embed.add_field(
+                name="💙 Remember",
+                value="This is a supportive community. You matter, and you're not alone here.",
+                inline=False
+            )
+            embed.set_footer(text=f"Member #{len(member.guild.members)} | Your wellbeing matters")
             await channel.send(embed=embed)
             break
 
 
 @bot.event
 async def on_message(message):
-    """Process messages and respond to coffee mentions"""
+    """Process messages and respond to coffee/mental health keywords"""
     if message.author == bot.user:
         return
     
-    # Coffee keyword responses
+    # Mental health keywords for supportive responses
+    mental_health_keywords = ['stress', 'anxiety', 'depression', 'sad', 'worried', 'panic', 'overwhelmed', 'tired', 'exhausted']
     coffee_keywords = ['coffee', 'café', 'espresso', 'latte', 'cappuccino', 'mocha', 'brew']
-    if any(keyword in message.content.lower() for keyword in coffee_keywords):
+    
+    message_content = message.content.lower()
+    
+    # Respond to mental health keywords with support
+    if any(keyword in message_content for keyword in mental_health_keywords):
+        if random.randint(1, 15) == 1:  # 6.7% chance to respond
+            supportive_responses = [
+                "💙 I notice you might be going through something difficult. Remember, you're not alone.",
+                "🫂 Take care of yourself. Try `!breathe` for a calming exercise or `!affirmation` for positivity.",
+                "🌸 Your feelings are valid. Consider `!checkin` for reflection or `!crisis` if you need immediate support.",
+                "💚 Be gentle with yourself today. Mental health matters just as much as physical health."
+            ]
+            await message.add_reaction('💙')
+            if random.randint(1, 3) == 1:  # 33% of that 6.7%
+                await message.reply(random.choice(supportive_responses))
+    
+    # Respond to coffee keywords
+    elif any(keyword in message_content for keyword in coffee_keywords):
         if random.randint(1, 20) == 1:  # 5% chance to respond
             responses = [
-                "☕ Did someone mention coffee? I'm all ears!",
-                "☕ Mmm, coffee talk! My favorite topic!",
-                "☕ Nothing beats a good cup of joe!",
-                "☕ Coffee is the fuel of productivity!"
+                "☕ Coffee and conversation - two of life's simple pleasures!",
+                "☕ Nothing like a good cup of coffee to bring people together!",
+                "☕ Coffee break = mental health break. Both are important!",
+                "☕ The perfect blend: coffee culture meets community support!"
             ]
             await message.add_reaction('☕')
-            if random.randint(1, 5) == 1:  # 20% of that 5%
+            if random.randint(1, 4) == 1:  # 25% of that 5%
                 await message.reply(random.choice(responses))
     
     await bot.process_commands(message)
 
 
-# Coffee Facts Background Task
-@tasks.loop(hours=6)
-async def coffee_facts():
-    """Send coffee facts to channels that opted in"""
-    coffee_facts_list = [
-        "☕ Coffee is the world's second-most traded commodity after oil!",
-        "☕ The word 'coffee' comes from the Arabic word 'qahwah'!",
-        "☕ Finland consumes the most coffee per capita in the world!",
-        "☕ Coffee beans are actually seeds of coffee cherries!",
-        "☕ The most expensive coffee in the world comes from civet droppings!",
-        "☕ Coffee was originally discovered by goats in Ethiopia!",
-        "☕ Instant coffee was invented in 1901!",
-        "☕ A coffee tree can live for over 100 years!"
+# Daily Wellness Check Background Task (renamed from coffee_facts)
+@tasks.loop(hours=12)  # Every 12 hours
+async def daily_wellness_check():
+    """Send wellness reminders and mental health tips"""
+    wellness_tips = [
+        "💙 Remember to check in with yourself today. How are you feeling?",
+        "🌸 Take a moment to breathe deeply. Your mental health matters.",
+        "☕ Coffee tastes better when you're taking care of your mental wellness too.",
+        "🫂 You're not alone. This community is here to support each other.",
+        "🌱 Small acts of self-care add up to big improvements in wellbeing.",
+        "💚 It's okay to have difficult days. Tomorrow is a new opportunity.",
+        "✨ You matter, your feelings are valid, and you deserve support.",
+        "🫁 When life feels overwhelming, try a breathing exercise with `!breathe`"
     ]
     
-    fact = random.choice(coffee_facts_list)
+    tip = random.choice(wellness_tips)
     
-    # Send to channels that have opted in (you can implement this feature)
+    # Send to wellness channels
     for guild in bot.guilds:
-        # Look for a coffee-facts channel or similar
-        channel = discord.utils.get(guild.text_channels, name='coffee-facts')
-        if channel:
-            embed = discord.Embed(
-                title="☕ Daily Coffee Fact",
-                description=fact,
-                color=BOT_COLOR,
-                timestamp=datetime.utcnow()
-            )
-            embed.set_footer(text="MochaBot Coffee Facts")
-            try:
-                await channel.send(embed=embed)
-            except:
-                pass  # Ignore errors if we can't send to the channel
+        wellness_channel_names = ['wellness', 'mental-health', 'support', 'daily-wellness', 'self-care']
+        for channel_name in wellness_channel_names:
+            channel = discord.utils.get(guild.text_channels, name=channel_name)
+            if channel:
+                embed = discord.Embed(
+                    title="🌸 Daily Wellness Reminder",
+                    description=tip,
+                    color=0x87CEEB,  # Calming sky blue
+                    timestamp=datetime.utcnow()
+                )
+                embed.add_field(
+                    name="🛠️ Quick Tools",
+                    value=f"`{BOT_PREFIX}checkin` | `{BOT_PREFIX}breathe` | `{BOT_PREFIX}affirmation` | `{BOT_PREFIX}selfcare`",
+                    inline=False
+                )
+                embed.set_footer(text="MochaBot Wellness • Your mental health matters 💙")
+                try:
+                    await channel.send(embed=embed)
+                    break  # Only send to first matching channel per guild
+                except:
+                    pass
 
 
-# Load all cogs
+# Load all cogs including mental health
 async def load_cogs():
-    """Load all cog files"""
+    """Load all cog files including mental health support"""
     cogs = [
         'cogs.general',
         'cogs.coffee',
+        'cogs.mentalhealth',  # New mental health cog
         'cogs.moderation',
         'cogs.fun',
         'cogs.utility'
@@ -421,9 +517,11 @@ async def main():
         token = os.getenv('DISCORD_TOKEN')
         if not token:
             logger.error("❌ DISCORD_TOKEN environment variable not found!")
+            logger.error("💡 Make sure you have created a .env file with your bot token")
             return
         
         try:
+            logger.info("🚀 Starting MochaBot with mental health support...")
             await bot.start(token)
         except Exception as e:
             logger.error(f"❌ Failed to start bot: {e}")
@@ -431,4 +529,8 @@ async def main():
 
 if __name__ == '__main__':
     # Run the bot
+    print("☕ MochaBot - Mental Health & Coffee Community Support")
+    print("🧠 Loading mental wellness resources...")
+    print("💙 Remember: You matter and you're not alone\n")
+    
     asyncio.run(main())
