@@ -20,6 +20,12 @@ import aiohttp
 import logging
 
 # =========================
+# Logging Configuration (standardized)
+# =========================
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("mochabot")
+
+# =========================
 # Token Configuration
 # =========================
 # You can hardcode your token here to avoid environment variables.
@@ -35,7 +41,7 @@ BOT_TOKEN: str = os.getenv("DISCORD_TOKEN", "")
 # Basic Bot configuration
 # =========================
 BOT_PREFIX = '!'
-BOT_VERSION = "2.1.1"  # Bumped version for token-inline support
+BOT_VERSION = "2.1.2"  # Bumped version; standardized logging
 BOT_COLOR = 0x8B4513  # Coffee brown color
 
 # Intents setup
@@ -310,8 +316,8 @@ async def daily_wellness_check():
                 try:
                     await channel.send(embed=embed)
                     break
-                except:
-                    pass
+                except Exception as e:
+                    logger.warning(f"Failed to send wellness reminder in {guild.name}: {e}")
 
 # Load all cogs including mental health
 async def load_cogs():
@@ -326,9 +332,9 @@ async def load_cogs():
     for cog in cogs:
         try:
             await bot.load_extension(cog)
-            logging.info(f'✅ Loaded cog: {cog}')
+            logger.info(f'✅ Loaded cog: {cog}')
         except Exception as e:
-            logging.error(f'❌ Failed to load cog {cog}: {e}')
+            logger.error(f'❌ Failed to load cog {cog}: {e}')
 
 async def main():
     async with bot:
@@ -336,15 +342,13 @@ async def main():
         # Determine token source: prefer inline BOT_TOKEN; fallback to env
         token = BOT_TOKEN or os.getenv('DISCORD_TOKEN') or ""
         if not token:
-            logging.error("❌ No bot token found. Set BOT_TOKEN in bot.py or DISCORD_TOKEN env var.")
+            logger.error("❌ No bot token found. Set BOT_TOKEN in bot.py or DISCORD_TOKEN env var.")
             return
         try:
-            logging.info("🚀 Starting MochaBot...")
+            logger.info("🚀 Starting MochaBot...")
             await bot.start(token)
         except Exception as e:
-            logging.error(f"❌ Failed to start bot: {e}")
+            logger.error(f"❌ Failed to start bot: {e}")
 
 if __name__ == '__main__':
-    # To use inline token: paste it into BOT_TOKEN above. Cogs will still load.
-    # To use env: set DISCORD_TOKEN on your host/panel.
     asyncio.run(main())
