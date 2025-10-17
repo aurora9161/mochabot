@@ -109,30 +109,173 @@ class MentalHealth(commands.Cog):
             }
         ]
         
-        # Crisis resources
+        # Crisis resources (expanded)
+        # Keys are ISO country codes or common names; values are dict of service -> contact
         self.crisis_resources = {
             'US': {
-                'National Suicide Prevention Lifeline': '988',
+                'Suicide & Crisis Lifeline': '988',
                 'Crisis Text Line': 'Text HOME to 741741',
                 'SAMHSA National Helpline': '1-800-662-4357'
             },
             'UK': {
                 'Samaritans': '116 123',
-                'Crisis Text Line UK': 'Text SHOUT to 85258',
+                'Crisis Text Line': 'Text SHOUT to 85258',
                 'NHS 111': '111'
             },
-            'Canada': {
+            'CA': {
                 'Talk Suicide Canada': '1-833-456-4566',
-                'Crisis Text Line Canada': 'Text TALK to 686868'
+                'Crisis Text Line': 'Text TALK to 686868'
             },
-            'Australia': {
+            'AU': {
                 'Lifeline': '13 11 14',
                 'Kids Helpline': '1800 55 1800'
             },
-            'India': {
+            'IN': {
                 'Vandrevala Foundation': '1860-2662-345',
-                'AASRA': '91-9820466726'
+                'AASRA': '+91-9820466726'
+            },
+            'IE': {
+                'Samaritans Ireland': '116 123',
+                'Pieta House': '1800 247 247'
+            },
+            'NZ': {
+                'Lifeline Aotearoa': '0800 543 354',
+                '1737 Need to Talk?': 'Text/Call 1737'
+            },
+            'SG': {
+                'Samaritans of Singapore (SOS)': '1767 / CareText: 9151 1767'
+            },
+            'PH': {
+                'National Center for Mental Health Crisis Hotline': '1553 / 0917-899-USAP (8727)'
+            },
+            'MY': {
+                'Befrienders KL': '03-7627 2929'
+            },
+            'ZA': {
+                'Lifeline South Africa': '0861 322 322',
+                'SADAG Suicide Crisis Line': '0800 567 567'
+            },
+            'NG': {
+                'Mentally Aware Nigeria (MANI)': '0809 111 6264'
+            },
+            'KE': {
+                'Befrienders Kenya': '+254 722 178 177'
+            },
+            'GH': {
+                'Mental Health Authority Helpline': '0800-111-101'
+            },
+            'PK': {
+                'Umang Pakistan Helpline': '0311-7786264'
+            },
+            'BD': {
+                'Kaan Pete Roi': '0966 678 6464'
+            },
+            'LK': {
+                'Sumithrayo': '011 269 6666'
+            },
+            'AE': {
+                '800 HOPE (NCMH)': '800 4673'
+            },
+            'SA': {
+                'Saudi Life Line': '920033360'
+            },
+            'TR': {
+                'Alo 183': '183 (Social Support)'
+            },
+            'DE': {
+                'TelefonSeelsorge': '0800 111 0 111 / 0800 111 0 222'
+            },
+            'FR': {
+                '3114 Suicide Prevention Hotline': '3114'
+            },
+            'ES': {
+                '024 Línea 024': '024'
+            },
+            'IT': {
+                'Samaritans Italy': '06 77208977'
+            },
+            'PT': {
+                'SOS Voz Amiga': '213 544 545'
+            },
+            'NL': {
+                '113 Zelfmoordpreventie': '0800-0113'
+            },
+            'BE': {
+                'Zelfmoordlijn 1813': '1813'
+            },
+            'SE': {
+                'Mind Självmordslinjen': '90101'
+            },
+            'NO': {
+                'Mental Helse Hjelpetelefonen': '116 123'
+            },
+            'DK': {
+                'Livslinien': '70 201 201'
+            },
+            'FI': {
+                'Crisis Centre Phone': '09 2525 0111'
+            },
+            'PL': {
+                'Centrum Wsparcia': '800 70 2222'
+            },
+            'CZ': {
+                'Linka Bezpečí': '116 111'
+            },
+            'AT': {
+                'TelefonSeelsorge Österreich': '142'
+            },
+            'CH': {
+                'Die Dargebotene Hand': '143'
+            },
+            'RO': {
+                'Alianța Română de Prevenție a Suicidului': '0800 801 200'
+            },
+            'GR': {
+                'Suicide Helpline': '1018'
+            },
+            'IL': {
+                'ERAN Emotional First Aid': '1201'
+            },
+            'MX': {
+                'Línea de la Vida': '800 911 2000'
+            },
+            'BR': {
+                'Centro de Valorização da Vida (CVV)': '188'
+            },
+            'AR': {
+                'Línea de Prevención del Suicidio': '135 / (011) 5275-1135'
+            },
+            'CL': {
+                'Servicio Salud Responde': '600 360 7777'
+            },
+            'CO': {
+                'Línea 106': '106'
+            },
+            'PE': {
+                'Línea 113 (Option 5)': '113'
+            },
+            'UY': {
+                'Vida': '0800 0767'
             }
+        }
+        
+        # Map common country names to codes for user convenience
+        self.country_aliases = {
+            'USA': 'US', 'UNITED STATES': 'US', 'AMERICA': 'US',
+            'UNITED KINGDOM': 'UK', 'BRITAIN': 'UK', 'ENGLAND': 'UK',
+            'CANADA': 'CA', 'AUSTRALIA': 'AU', 'INDIA': 'IN',
+            'IRELAND': 'IE', 'NEW ZEALAND': 'NZ', 'SINGAPORE': 'SG',
+            'PHILIPPINES': 'PH', 'MALAYSIA': 'MY', 'SOUTH AFRICA': 'ZA',
+            'NIGERIA': 'NG', 'KENYA': 'KE', 'GHANA': 'GH',
+            'PAKISTAN': 'PK', 'BANGLADESH': 'BD', 'SRI LANKA': 'LK',
+            'UAE': 'AE', 'SAUDI ARABIA': 'SA', 'TURKIYE': 'TR', 'TURKEY': 'TR',
+            'GERMANY': 'DE', 'FRANCE': 'FR', 'SPAIN': 'ES', 'ITALY': 'IT',
+            'PORTUGAL': 'PT', 'NETHERLANDS': 'NL', 'BELGIUM': 'BE',
+            'SWEDEN': 'SE', 'NORWAY': 'NO', 'DENMARK': 'DK', 'FINLAND': 'FI',
+            'POLAND': 'PL', 'CZECH': 'CZ', 'AUSTRIA': 'AT', 'SWITZERLAND': 'CH',
+            'ROMANIA': 'RO', 'GREECE': 'GR', 'ISRAEL': 'IL',
+            'MEXICO': 'MX', 'BRAZIL': 'BR', 'ARGENTINA': 'AR', 'CHILE': 'CL',
+            'COLOMBIA': 'CO', 'PERU': 'PE', 'URUGUAY': 'UY'
         }
     
     @commands.hybrid_command(name='affirmation', aliases=['affirm'], description='Get a positive affirmation')
@@ -235,32 +378,27 @@ class MentalHealth(commands.Cog):
         """Track your mood on a scale of 1-10"""
         
         if mood_level is None:
-            # Show mood tracking info
             embed = discord.Embed(
                 title='📊 Mood Tracking',
                 description='Track your daily mood to identify patterns and triggers.',
-                color=0xFFB6C1,  # Light pink
+                color=0xFFB6C1,
                 timestamp=datetime.utcnow()
             )
-            
             embed.add_field(
                 name='How to Use',
                 value='`!mood <1-10> [optional notes]`\n\nExample: `!mood 7 Had a good day at work`',
                 inline=False
             )
-            
             embed.add_field(
                 name='Mood Scale',
                 value='1-2: Very Low 😞\n3-4: Low 😔\n5-6: Neutral 😐\n7-8: Good 😊\n9-10: Great 😄',
                 inline=False
             )
-            
             embed.add_field(
                 name='💡 Benefits',
                 value='• Identify patterns\n• Track progress\n• Recognize triggers\n• Share with therapist',
                 inline=False
             )
-            
             await ctx.send(embed=embed)
             return
         
@@ -268,107 +406,66 @@ class MentalHealth(commands.Cog):
             await ctx.send('❌ Mood level must be between 1 and 10!')
             return
         
-        # Mood responses
-        mood_emojis = {
-            1: '😢', 2: '😞', 3: '😔', 4: '🙁', 5: '😐',
-            6: '🙂', 7: '😊', 8: '😄', 9: '😁', 10: '🤩'
-        }
-        
-        mood_colors = {
-            1: 0x8B0000, 2: 0xDC143C, 3: 0xFF4500, 4: 0xFF8C00, 5: 0xFFD700,
-            6: 0xADFF2F, 7: 0x32CD32, 8: 0x00FF7F, 9: 0x00CED1, 10: 0x9370DB
-        }
-        
+        mood_emojis = {1:'😢',2:'😞',3:'😔',4:'🙁',5:'😐',6:'🙂',7:'😊',8:'😄',9:'😁',10:'🤩'}
+        mood_colors = {1:0x8B0000,2:0xDC143C,3:0xFF4500,4:0xFF8C00,5:0xFFD700,6:0xADFF2F,7:0x32CD32,8:0x00FF7F,9:0x00CED1,10:0x9370DB}
         embed = discord.Embed(
             title=f'{mood_emojis[mood_level]} Mood Logged',
             description=f'You rated your mood as **{mood_level}/10**',
             color=mood_colors[mood_level],
             timestamp=datetime.utcnow()
         )
-        
         if notes:
             embed.add_field(name='Notes', value=notes, inline=False)
-        
         if mood_level <= 3:
-            embed.add_field(
-                name='💙 Remember',
-                value='It\'s okay to have difficult days. Consider reaching out to someone you trust or using the `!crisis` command if you need immediate support.',
-                inline=False
-            )
+            embed.add_field(name='💙 Remember', value='It\'s okay to have difficult days. Consider reaching out or use `!crisis` for support.', inline=False)
         elif mood_level <= 5:
-            embed.add_field(
-                name='🌱 Suggestion',
-                value='Try a `!breathe` exercise or `!affirmation` to help lift your spirits.',
-                inline=False
-            )
+            embed.add_field(name='🌱 Suggestion', value='Try a `!breathe` exercise or `!affirmation`.', inline=False)
         else:
-            embed.add_field(
-                name='🌟 Great!',
-                value='I\'m glad you\'re feeling good! Remember this feeling for tougher days.',
-                inline=False
-            )
-        
+            embed.add_field(name='🌟 Great!', value='I\'m glad you\'re feeling good! Remember this feeling for tougher days.', inline=False)
         embed.set_footer(text=f"Logged by {ctx.author.display_name} | Your feelings matter")
-        
         await ctx.send(embed=embed)
     
     @commands.hybrid_command(name='crisis', description='Get emergency mental health resources')
-    async def crisis(self, ctx, country: str = 'US'):
+    async def crisis(self, ctx, *, country: str = 'US'):
         """Access crisis helplines and emergency mental health resources"""
+        key = country.strip().upper()
+        # Map common names to codes
+        key = self.country_aliases.get(key, key)
         
-        country = country.upper()
-        
-        if country not in self.crisis_resources:
-            available_countries = ', '.join(self.crisis_resources.keys())
+        if key not in self.crisis_resources:
+            available = ', '.join(sorted(self.crisis_resources.keys()))
+            alias_hint = 'You can use country names too (e.g., India, Canada, Brazil).'
             embed = discord.Embed(
                 title='🆘 Crisis Resources',
-                description=f'Available countries: {available_countries}\nUse `!crisis <country>` for specific resources.',
+                description=f'No direct match for "{country}". Available country codes: {available}\n{alias_hint}\nUse `!crisis <country>` for specific resources.',
                 color=0xFF0000,
                 timestamp=datetime.utcnow()
             )
         else:
-            resources = self.crisis_resources[country]
+            resources = self.crisis_resources[key]
+            country_display = next((name for name, code in self.country_aliases.items() if code == key and name.isupper()), key)
             embed = discord.Embed(
-                title=f'🆘 Crisis Resources - {country}',
-                description='**If you are in immediate danger, call emergency services (911, 999, 112)**',
+                title=f'🆘 Crisis Resources - {country_display}',
+                description='If you are in immediate danger, call local emergency services (911, 999, 112).',
                 color=0xFF0000,
                 timestamp=datetime.utcnow()
             )
-            
             for service, contact in resources.items():
-                embed.add_field(
-                    name=f'📞 {service}',
-                    value=f'**{contact}**',
-                    inline=False
-                )
+                embed.add_field(name=f'📞 {service}', value=f'**{contact}**', inline=False)
         
-        embed.add_field(
-            name='💙 Remember',
-            value='You are not alone. There are people who want to help you through this difficult time.',
-            inline=False
-        )
-        
-        embed.add_field(
-            name='🌟 You Matter',
-            value='Your life has value. Tomorrow can be different. Please reach out.',
-            inline=False
-        )
-        
+        embed.add_field(name='💙 Remember', value='You are not alone. People want to help you through this.', inline=False)
+        embed.add_field(name='🌟 You Matter', value='Your life has value. Please reach out.', inline=False)
         embed.set_footer(text="Crisis resources are available 24/7 | You deserve support")
-        
         await ctx.send(embed=embed)
     
     @commands.hybrid_command(name='checkin', description='Daily mental health check-in')
     async def checkin(self, ctx):
-        """Interactive daily mental health check-in"""
-        
         embed = discord.Embed(
             title='🌅 Daily Check-In',
             description='Take a moment to reflect on how you\'re doing today.',
-            color=0xFFA07A,  # Light salmon
+            color=0xFFA07A,
             timestamp=datetime.utcnow()
         )
-        
         questions = [
             '❤️ How is your heart feeling today?',
             '🧠 How is your mind feeling today?',
@@ -376,168 +473,68 @@ class MentalHealth(commands.Cog):
             '🤝 How are your relationships today?',
             '🎯 What\'s one thing you\'re grateful for?'
         ]
-        
-        embed.add_field(
-            name='Reflection Questions',
-            value='\n'.join(questions),
-            inline=False
-        )
-        
-        embed.add_field(
-            name='💡 How to Use',
-            value='Take a few minutes to think about these questions. You don\'t need to answer them here - just reflect personally.',
-            inline=False
-        )
-        
-        embed.add_field(
-            name='🌱 Daily Practice',
-            value='Regular check-ins help you stay aware of your mental health and catch issues early.',
-            inline=False
-        )
-        
+        embed.add_field(name='Reflection Questions', value='\n'.join(questions), inline=False)
+        embed.add_field(name='💡 How to Use', value='You don\'t have to answer here; reflect personally or journal.', inline=False)
+        embed.add_field(name='🌱 Daily Practice', value='Regular check-ins help you stay aware of your mental health.', inline=False)
         embed.set_footer(text="Self-awareness is the first step to self-care 🌸")
-        
         message = await ctx.send(embed=embed)
-        await message.add_reaction('💝')  # Heart gift
-        await message.add_reaction('🌱')  # Growth
-        await message.add_reaction('✨')  # Sparkles
+        await message.add_reaction('💝')
+        await message.add_reaction('🌱')
+        await message.add_reaction('✨')
     
     @commands.hybrid_command(name='selfcare', aliases=['care'], description='Get self-care suggestions')
     async def selfcare(self, ctx, category: str = None):
-        """Get personalized self-care suggestions"""
-        
         selfcare_activities = {
             'physical': [
-                'Take a warm bath or shower',
-                'Go for a gentle walk outside',
-                'Do some light stretching',
-                'Practice yoga or meditation',
-                'Get enough sleep tonight',
-                'Drink a glass of water',
-                'Eat a nourishing meal',
-                'Dance to your favorite music'
+                'Take a warm bath or shower', 'Go for a gentle walk outside', 'Do some light stretching', 'Practice yoga', 'Get enough sleep', 'Drink water', 'Eat a nourishing meal', 'Dance to music'
             ],
             'emotional': [
-                'Write in a journal',
-                'Call someone you care about',
-                'Practice gratitude',
-                'Allow yourself to cry if needed',
-                'Listen to calming music',
-                'Watch a comfort movie',
-                'Practice self-compassion',
-                'Set a boundary you need'
+                'Write in a journal', 'Call someone you care about', 'Practice gratitude', 'Allow yourself to cry', 'Listen to calming music', 'Watch a comfort movie', 'Practice self-compassion', 'Set a boundary'
             ],
             'mental': [
-                'Take breaks from social media',
-                'Read a book you enjoy',
-                'Practice a hobby you love',
-                'Learn something new',
-                'Organize a small space',
-                'Do a puzzle or brain game',
-                'Limit news consumption',
-                'Practice mindfulness'
+                'Take a social media break', 'Read a book', 'Practice a hobby', 'Learn something new', 'Organize a small space', 'Do a puzzle', 'Limit news', 'Practice mindfulness'
             ],
             'social': [
-                'Reach out to a friend',
-                'Join a support group',
-                'Spend time with pets',
-                'Video call family',
-                'Write a thank you note',
-                'Volunteer for a cause you care about',
-                'Join an online community',
-                'Practice active listening'
+                'Reach out to a friend', 'Join a support group', 'Spend time with pets', 'Video call family', 'Write a thank you note', 'Volunteer', 'Join a community', 'Practice active listening'
             ]
         }
-        
         if category and category.lower() in selfcare_activities:
             activities = selfcare_activities[category.lower()]
             title = f'💆 {category.title()} Self-Care'
-            color = 0x98FB98
         elif category:
             available = ', '.join(selfcare_activities.keys())
             await ctx.send(f'❌ Category not found! Available: {available}')
             return
         else:
-            # Random activity from any category
-            all_activities = []
-            for activities in selfcare_activities.values():
-                all_activities.extend(activities)
-            activities = [random.choice(all_activities)]
+            all_acts = [a for lst in selfcare_activities.values() for a in lst]
+            activities = [random.choice(all_acts)]
             title = '💆 Self-Care Suggestion'
-            color = 0x98FB98
-        
-        embed = discord.Embed(
-            title=title,
-            color=color,
-            timestamp=datetime.utcnow()
-        )
-        
+        embed = discord.Embed(title=title, color=0x98FB98, timestamp=datetime.utcnow())
         if len(activities) == 1:
             embed.description = f'✨ {activities[0]}'
         else:
             suggestions = random.sample(activities, min(5, len(activities)))
-            embed.add_field(
-                name='Try one of these:',
-                value='\n'.join([f'• {activity}' for activity in suggestions]),
-                inline=False
-            )
-        
-        embed.add_field(
-            name='💝 Remember',
-            value='Self-care isn\'t selfish - it\'s necessary. You deserve care and kindness.',
-            inline=False
-        )
-        
+            embed.add_field(name='Try one of these:', value='\n'.join([f'• {a}' for a in suggestions]), inline=False)
+        embed.add_field(name='💝 Remember', value='Self-care isn\'t selfish — it\'s necessary. You deserve kindness.', inline=False)
         embed.set_footer(text="Small acts of self-care make a big difference 🌺")
-        
         await ctx.send(embed=embed)
     
     @commands.hybrid_command(name='therapy', description='Information about therapy and mental health resources')
     async def therapy(self, ctx):
-        """Get information about therapy and mental health support"""
-        
         embed = discord.Embed(
             title='🛋️ Therapy & Mental Health Support',
             description='Professional mental health support can be incredibly helpful.',
-            color=0x9370DB,  # Medium purple
+            color=0x9370DB,
             timestamp=datetime.utcnow()
         )
-        
-        embed.add_field(
-            name='🔍 Finding a Therapist',
-            value='• Psychology Today directory\n• Your insurance provider\'s website\n• Local community health centers\n• University counseling centers\n• Employee assistance programs',
-            inline=False
-        )
-        
-        embed.add_field(
-            name='💻 Online Therapy Options',
-            value='• BetterHelp\n• Talkspace\n• MDLIVE\n• Amwell\n• 7 Cups (peer support)',
-            inline=False
-        )
-        
-        embed.add_field(
-            name='💰 Affordable Options',
-            value='• Community mental health centers\n• Sliding scale fee therapists\n• Support groups\n• Crisis text lines\n• Mental health apps',
-            inline=False
-        )
-        
-        embed.add_field(
-            name='🌟 What to Expect',
-            value='Therapy is a safe space to explore your thoughts and feelings with a trained professional. It\'s okay to shop around for the right fit!',
-            inline=False
-        )
-        
-        embed.add_field(
-            name='💙 Remember',
-            value='Seeking therapy is a sign of strength, not weakness. You deserve support and care.',
-            inline=False
-        )
-        
-        embed.set_footer(text="Your mental health is just as important as your physical health 💚")
-        
+        embed.add_field(name='🔍 Finding a Therapist', value='• Psychology Today directory\n• Insurance provider website\n• Community health centers\n• University counseling centers\n• Employee assistance programs', inline=False)
+        embed.add_field(name='💻 Online Therapy Options', value='• BetterHelp\n• Talkspace\n• MDLIVE\n• Amwell\n• 7 Cups (peer support)', inline=False)
+        embed.add_field(name='💰 Affordable Options', value='• Community mental health centers\n• Sliding scale therapists\n• Support groups\n• Crisis text lines\n• Mental health apps', inline=False)
+        embed.add_field(name='🌟 What to Expect', value='Therapy is a safe space with a trained professional. It\'s okay to shop around for the right fit.', inline=False)
+        embed.add_field(name='💙 Remember', value='Seeking therapy is a sign of strength. You deserve support and care.', inline=False)
+        embed.set_footer(text="Your mental health is as important as your physical health 💚")
         await ctx.send(embed=embed)
 
 
 async def setup(bot):
-    """Setup function to add the cog"""
     await bot.add_cog(MentalHealth(bot))
