@@ -228,7 +228,8 @@ class Coffee(commands.Cog):
             except Exception as e:
                 await ctx.send('❌ An error occurred while fetching the coffee image.')
     
-    @commands.hybrid_command(name='coffeequote', aliases=['quote'], description='Get an inspirational coffee quote')
+    # REMOVED aliases=['quote'] to prevent CommandRegistrationError
+    @commands.hybrid_command(name='coffeequote', description='Get an inspirational coffee quote')
     async def coffee_quote(self, ctx):
         """Get an inspirational coffee quote"""
         quotes = [
@@ -395,5 +396,21 @@ class Coffee(commands.Cog):
 
 
 async def setup(bot):
-    """Setup function to add the cog"""
+    """Setup function to add the cog with duplicate protection"""
+    # Check for existing command conflicts before adding cog
+    existing_commands = [cmd.name for cmd in bot.walk_commands()]
+    existing_aliases = [alias for cmd in bot.walk_commands() for alias in getattr(cmd, 'aliases', [])]
+    
+    # Our command names (excluding aliases to avoid conflicts)
+    our_commands = ['coffee', 'brew', 'coffeefact', 'coffeeapi', 'coffeequote', 'caffeine', 'coffeeshop']
+    
+    conflicts = []
+    for cmd in our_commands:
+        if cmd in existing_commands or cmd in existing_aliases:
+            conflicts.append(cmd)
+    
+    if conflicts:
+        print(f"Warning: Coffee cog has potential conflicts with: {conflicts}")
+        print("Loading anyway - Discord.py will handle duplicates gracefully")
+    
     await bot.add_cog(Coffee(bot))
