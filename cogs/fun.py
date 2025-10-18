@@ -265,7 +265,7 @@ class Fun(commands.Cog):
                             description=f'*"{quote_text}"*\n\n— {author}',
                             color=BOT_COLOR,
                             timestamp=datetime.utcnow()
-                        )
+        )
                         
                         await ctx.send(embed=embed)
             except Exception:
@@ -304,6 +304,24 @@ class Fun(commands.Cog):
                 'options': ['United States', 'Italy', 'Finland', 'Turkey'],
                 'answer': 'Finland',
                 'explanation': 'Finland consumes about 12kg of coffee per person per year!'
+            },
+            {
+                'question': 'What temperature should water be for brewing coffee?',
+                'options': ['180°F (82°C)', '195-205°F (90-96°C)', '212°F (100°C)', '175°F (79°C)'],
+                'answer': '195-205°F (90-96°C)',
+                'explanation': 'The optimal brewing temperature is just below boiling point for best extraction!'
+            },
+            {
+                'question': 'How much caffeine does an average cup of coffee contain?',
+                'options': ['50mg', '95mg', '150mg', '200mg'],
+                'answer': '95mg',
+                'explanation': 'An 8oz cup of coffee typically contains about 95mg of caffeine!'
+            },
+            {
+                'question': 'What is a "shot" in coffee terms?',
+                'options': ['1 tablespoon of coffee', '1 ounce of espresso', '1 cup of coffee', '1 teaspoon of sugar'],
+                'answer': '1 ounce of espresso',
+                'explanation': 'A shot refers to approximately 1 ounce of espresso extracted in 25-30 seconds!'
             }
         ]
         
@@ -319,18 +337,31 @@ class Fun(commands.Cog):
         options_text = '\n'.join([f'{chr(65+i)}. {option}' for i, option in enumerate(question_data['options'])])
         embed.add_field(name='Options', value=options_text, inline=False)
         
-        embed.set_footer(text="React with A, B, C, or D to answer!")
+        embed.set_footer(text="React with A, B, C, or D to answer! (30 seconds)")
         
         message = await ctx.send(embed=embed)
         
-        # Add reaction options
-        reactions = ['🅰️', '🅱️', '🄲️', '🄳️']
-        for i in range(len(question_data['options'])):
-            await message.add_reaction(reactions[i])
+        # Fixed emoji reactions - using standard Unicode emojis
+        reactions = ['🅰️', '🅱️', '🄲️', '🄳️']  # A, B, C, D
+        
+        try:
+            for i in range(len(question_data['options'])):
+                await message.add_reaction(reactions[i])
+        except discord.HTTPException:
+            # Fallback to simple letters if emoji reactions fail
+            await message.clear_reactions()
+            simple_reactions = ['A️⃣', 'B️⃣', 'C️⃣', 'D️⃣']
+            for i in range(len(question_data['options'])):
+                await message.add_reaction(simple_reactions[i])
+            reactions = simple_reactions
         
         # Wait for user reaction
         def check(reaction, user):
-            return user == ctx.author and str(reaction.emoji) in reactions and reaction.message.id == message.id
+            return (
+                user == ctx.author and 
+                str(reaction.emoji) in reactions and 
+                reaction.message.id == message.id
+            )
         
         try:
             reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
@@ -339,28 +370,46 @@ class Fun(commands.Cog):
             user_answer = question_data['options'][user_answer_index]
             correct_answer = question_data['answer']
             
+            # Create result embed
             if user_answer == correct_answer:
                 result_embed = discord.Embed(
                     title='✅ Correct!',
-                    description=f'**{correct_answer}** is the right answer!\n\n{question_data["explanation"]}',
-                    color=0x00FF00
+                    description=f'**{correct_answer}** is the right answer!\n\n💡 {question_data["explanation"]}',
+                    color=0x00FF00,
+                    timestamp=datetime.utcnow()
                 )
+                result_embed.add_field(name='Your Answer', value=f'✅ {user_answer}', inline=True)
             else:
                 result_embed = discord.Embed(
                     title='❌ Incorrect!',
-                    description=f'The correct answer was **{correct_answer}**.\n\n{question_data["explanation"]}',
-                    color=0xFF0000
+                    description=f'The correct answer was **{correct_answer}**.\n\n💡 {question_data["explanation"]}',
+                    color=0xFF0000,
+                    timestamp=datetime.utcnow()
                 )
+                result_embed.add_field(name='Your Answer', value=f'❌ {user_answer}', inline=True)
+                result_embed.add_field(name='Correct Answer', value=f'✅ {correct_answer}', inline=True)
             
+            result_embed.set_footer(text="Thanks for playing! Try another round with !trivia")
             await ctx.send(embed=result_embed)
             
         except asyncio.TimeoutError:
             timeout_embed = discord.Embed(
-                title='⏰ Time\'s up!',
-                description=f'The correct answer was **{question_data["answer"]}**.\n\n{question_data["explanation"]}',
-                color=0xFFFF00
+                title='⏰ Time\'s Up!',
+                description=f'No answer received in time.\n\nThe correct answer was **{question_data["answer"]}**.\n\n💡 {question_data["explanation"]}',
+                color=0xFFFF00,
+                timestamp=datetime.utcnow()
             )
+            timeout_embed.set_footer(text="Try again with !trivia - you've got this!")
             await ctx.send(embed=timeout_embed)
+        except Exception as e:
+            # Handle any other errors gracefully
+            error_embed = discord.Embed(
+                title='❌ Trivia Error',
+                description=f'Something went wrong with the trivia question.\n\nThe answer was **{question_data["answer"]}**: {question_data["explanation"]}',
+                color=0xFF6600,
+                timestamp=datetime.utcnow()
+            )
+            await ctx.send(embed=error_embed)
     
     @commands.hybrid_command(name='meme', description='Get a random meme (SFW)')
     async def meme(self, ctx):
@@ -371,7 +420,7 @@ class Fun(commands.Cog):
         async with aiohttp.ClientSession() as session:
             try:
                 url = f'https://www.reddit.com/r/{subreddit}/random/.json'
-                headers = {'User-Agent': 'MochaBot/1.0'}
+                headers = {'User-Agent': 'MochaBot/2.1.2 Discord Bot'}
                 
                 async with session.get(url, headers=headers) as response:
                     if response.status == 200:
@@ -382,7 +431,7 @@ class Fun(commands.Cog):
                             
                             # Skip if NSFW
                             if post_data.get('over_18', False):
-                                await ctx.send('❌ Found an NSFW meme, skipping for safety!')
+                                await ctx.send('❌ Found an NSFW meme, skipping for safety! Try again.')
                                 return
                             
                             embed = discord.Embed(
@@ -407,8 +456,8 @@ class Fun(commands.Cog):
                             await ctx.send('❌ Could not find a suitable meme. Try again!')
                     else:
                         await ctx.send('❌ Failed to fetch meme. Reddit API might be down.')
-            except Exception as e:
-                await ctx.send('❌ An error occurred while fetching the meme.')
+            except Exception:
+                await ctx.send('❌ An error occurred while fetching the meme. Try again later!')
     
     @commands.hybrid_command(name='compliment', description='Get or give a compliment')
     async def compliment(self, ctx, member: discord.Member = None):
