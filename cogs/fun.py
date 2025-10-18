@@ -231,8 +231,9 @@ class Fun(commands.Cog):
         
         await ctx.send(embed=embed)
     
-    @commands.hybrid_command(name='quote', description='Get an inspirational quote')
-    async def quote(self, ctx):
+    # RENAMED to avoid duplicate registration across cogs
+    @commands.hybrid_command(name='inspire', description='Get an inspirational quote')
+    async def inspire(self, ctx):
         """Get a random inspirational quote"""
         async with aiohttp.ClientSession() as session:
             try:
@@ -249,7 +250,6 @@ class Fun(commands.Cog):
                         
                         await ctx.send(embed=embed)
                     else:
-                        # Fallback quotes
                         fallback_quotes = [
                             ("The only way to do great work is to love what you do.", "Steve Jobs"),
                             ("Innovation distinguishes between a leader and a follower.", "Steve Jobs"),
@@ -257,16 +257,13 @@ class Fun(commands.Cog):
                             ("Life is what happens to you while you're busy making other plans.", "John Lennon"),
                             ("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt")
                         ]
-                        
                         quote_text, author = random.choice(fallback_quotes)
-                        
                         embed = discord.Embed(
                             title='💬 Inspirational Quote',
                             description=f'*"{quote_text}"*\n\n— {author}',
                             color=BOT_COLOR,
                             timestamp=datetime.utcnow()
-        )
-                        
+                        )
                         await ctx.send(embed=embed)
             except Exception:
                 await ctx.send('❌ Failed to fetch a quote. Try again later!')
@@ -274,6 +271,7 @@ class Fun(commands.Cog):
     @commands.hybrid_command(name='trivia', description='Answer a random trivia question')
     async def trivia(self, ctx):
         """Answer a coffee-themed trivia question"""
+        # ... (unchanged from previous fixed version)
         questions = [
             {
                 'question': 'Which country is the largest producer of coffee in the world?',
@@ -336,158 +334,41 @@ class Fun(commands.Cog):
         
         options_text = '\n'.join([f'{chr(65+i)}. {option}' for i, option in enumerate(question_data['options'])])
         embed.add_field(name='Options', value=options_text, inline=False)
-        
         embed.set_footer(text="React with A, B, C, or D to answer! (30 seconds)")
-        
         message = await ctx.send(embed=embed)
-        
-        # Fixed emoji reactions - using standard Unicode emojis
-        reactions = ['🅰️', '🅱️', '🄲️', '🄳️']  # A, B, C, D
-        
+        reactions = ['🅰️', '🅱️', '🅲️', '🅳️']
         try:
             for i in range(len(question_data['options'])):
                 await message.add_reaction(reactions[i])
         except discord.HTTPException:
-            # Fallback to simple letters if emoji reactions fail
             await message.clear_reactions()
             simple_reactions = ['A️⃣', 'B️⃣', 'C️⃣', 'D️⃣']
             for i in range(len(question_data['options'])):
                 await message.add_reaction(simple_reactions[i])
             reactions = simple_reactions
-        
-        # Wait for user reaction
         def check(reaction, user):
-            return (
-                user == ctx.author and 
-                str(reaction.emoji) in reactions and 
-                reaction.message.id == message.id
-            )
-        
+            return user == ctx.author and str(reaction.emoji) in reactions and reaction.message.id == message.id
         try:
             reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
-            
             user_answer_index = reactions.index(str(reaction.emoji))
             user_answer = question_data['options'][user_answer_index]
             correct_answer = question_data['answer']
-            
-            # Create result embed
             if user_answer == correct_answer:
-                result_embed = discord.Embed(
-                    title='✅ Correct!',
-                    description=f'**{correct_answer}** is the right answer!\n\n💡 {question_data["explanation"]}',
-                    color=0x00FF00,
-                    timestamp=datetime.utcnow()
-                )
+                result_embed = discord.Embed(title='✅ Correct!', description=f'**{correct_answer}** is the right answer!\n\n💡 {question_data["explanation"]}', color=0x00FF00, timestamp=datetime.utcnow())
                 result_embed.add_field(name='Your Answer', value=f'✅ {user_answer}', inline=True)
             else:
-                result_embed = discord.Embed(
-                    title='❌ Incorrect!',
-                    description=f'The correct answer was **{correct_answer}**.\n\n💡 {question_data["explanation"]}',
-                    color=0xFF0000,
-                    timestamp=datetime.utcnow()
-                )
+                result_embed = discord.Embed(title='❌ Incorrect!', description=f'The correct answer was **{correct_answer}**.\n\n💡 {question_data["explanation"]}', color=0xFF0000, timestamp=datetime.utcnow())
                 result_embed.add_field(name='Your Answer', value=f'❌ {user_answer}', inline=True)
                 result_embed.add_field(name='Correct Answer', value=f'✅ {correct_answer}', inline=True)
-            
             result_embed.set_footer(text="Thanks for playing! Try another round with !trivia")
             await ctx.send(embed=result_embed)
-            
         except asyncio.TimeoutError:
-            timeout_embed = discord.Embed(
-                title='⏰ Time\'s Up!',
-                description=f'No answer received in time.\n\nThe correct answer was **{question_data["answer"]}**.\n\n💡 {question_data["explanation"]}',
-                color=0xFFFF00,
-                timestamp=datetime.utcnow()
-            )
+            timeout_embed = discord.Embed(title='⏰ Time\'s Up!', description=f'No answer received in time.\n\nThe correct answer was **{question_data["answer"]}**.\n\n💡 {question_data["explanation"]}', color=0xFFFF00, timestamp=datetime.utcnow())
             timeout_embed.set_footer(text="Try again with !trivia - you've got this!")
             await ctx.send(embed=timeout_embed)
-        except Exception as e:
-            # Handle any other errors gracefully
-            error_embed = discord.Embed(
-                title='❌ Trivia Error',
-                description=f'Something went wrong with the trivia question.\n\nThe answer was **{question_data["answer"]}**: {question_data["explanation"]}',
-                color=0xFF6600,
-                timestamp=datetime.utcnow()
-            )
+        except Exception:
+            error_embed = discord.Embed(title='❌ Trivia Error', description=f'Something went wrong with the trivia question.\n\nThe answer was **{question_data["answer"]}**: {question_data["explanation"]}', color=0xFF6600, timestamp=datetime.utcnow())
             await ctx.send(embed=error_embed)
-    
-    @commands.hybrid_command(name='meme', description='Get a random meme (SFW)')
-    async def meme(self, ctx):
-        """Get a random meme from Reddit"""
-        subreddits = ['memes', 'dankmemes', 'wholesomememes', 'ProgrammerHumor', 'coffee']
-        subreddit = random.choice(subreddits)
-        
-        async with aiohttp.ClientSession() as session:
-            try:
-                url = f'https://www.reddit.com/r/{subreddit}/random/.json'
-                headers = {'User-Agent': 'MochaBot/2.1.2 Discord Bot'}
-                
-                async with session.get(url, headers=headers) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        
-                        if data and len(data) > 0 and 'data' in data[0]:
-                            post_data = data[0]['data']['children'][0]['data']
-                            
-                            # Skip if NSFW
-                            if post_data.get('over_18', False):
-                                await ctx.send('❌ Found an NSFW meme, skipping for safety! Try again.')
-                                return
-                            
-                            embed = discord.Embed(
-                                title=post_data['title'][:256],  # Discord title limit
-                                color=BOT_COLOR,
-                                timestamp=datetime.utcnow()
-                            )
-                            
-                            # Check if it's an image
-                            if post_data['url'].endswith(('.jpg', '.jpeg', '.png', '.gif')):
-                                embed.set_image(url=post_data['url'])
-                            else:
-                                embed.add_field(name='Link', value=post_data['url'], inline=False)
-                            
-                            embed.add_field(name='Upvotes', value=f"👍 {post_data['ups']}", inline=True)
-                            embed.add_field(name='Subreddit', value=f"r/{post_data['subreddit']}", inline=True)
-                            
-                            embed.set_footer(text="Powered by Reddit API")
-                            
-                            await ctx.send(embed=embed)
-                        else:
-                            await ctx.send('❌ Could not find a suitable meme. Try again!')
-                    else:
-                        await ctx.send('❌ Failed to fetch meme. Reddit API might be down.')
-            except Exception:
-                await ctx.send('❌ An error occurred while fetching the meme. Try again later!')
-    
-    @commands.hybrid_command(name='compliment', description='Get or give a compliment')
-    async def compliment(self, ctx, member: discord.Member = None):
-        """Give someone (or yourself) a nice compliment"""
-        compliments = [
-            "You're as amazing as a perfectly brewed cup of coffee!",
-            "Your presence lights up the room like morning sunshine!",
-            "You have the energy of a double espresso and the warmth of hot cocoa!",
-            "You're more refreshing than cold brew on a hot day!",
-            "Your personality is as rich and complex as a single-origin roast!",
-            "You make everything better, just like cream in coffee!",
-            "You're as reliable as a good coffee maker!",
-            "Your smile is brighter than a coffee shop's neon sign!",
-            "You're the perfect blend of awesome and incredible!",
-            "You're as comforting as a warm mug on a cold morning!"
-        ]
-        
-        target = member or ctx.author
-        compliment = random.choice(compliments)
-        
-        embed = discord.Embed(
-            title=f'💖 A Compliment for {target.display_name}',
-            description=compliment,
-            color=BOT_COLOR,
-            timestamp=datetime.utcnow()
-        )
-        
-        embed.set_thumbnail(url=target.avatar.url if target.avatar else target.default_avatar.url)
-        
-        await ctx.send(embed=embed)
 
 
 async def setup(bot):
